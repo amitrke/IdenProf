@@ -1,19 +1,24 @@
 from __future__ import print_function
+import os
+#os.add_dll_directory("C:\\Program Files\\NVIDIA GPU Computing Toolkit\CUDA\\v11.2\\bin")
+#os.add_dll_directory("C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v11.2\\extras\\CUPTI\\lib64\\")
 
 from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import LearningRateScheduler
-import os
+
 from keras.callbacks import ModelCheckpoint
 from io import open
 import requests
 import shutil
 from zipfile import ZipFile
-import keras
+from tensorflow import keras
 from keras.layers import Dense, Activation, Conv2D, MaxPool2D, GlobalAvgPool2D, BatchNormalization, add, Input
 from keras.models import Model
-from tensorflow.python.keras.preprocessing import image
+from keras.preprocessing import image
+#from tensorflow.python.keras.preprocessing import image
 import numpy as np
 import json
+
 
 execution_path = os.getcwd()
 
@@ -196,6 +201,7 @@ def train_network():
     print(os.listdir(os.path.join(execution_path, "idenprof")))
 
     optimizer = keras.optimizers.Adam(lr=0.01, decay=1e-4)
+
     batch_size = 32
     num_classes = 10
     epochs = 200
@@ -217,7 +223,7 @@ def train_network():
     test_generator = test_datagen.flow_from_directory(DATASET_TEST_DIR, target_size=(224, 224), batch_size=batch_size,
                                                       class_mode="categorical")
 
-    model.fit_generator(train_generator, steps_per_epoch=int(9000 / batch_size), epochs=epochs,
+    model.fit(train_generator, steps_per_epoch=int(9000 / batch_size), epochs=epochs,
                         validation_data=test_generator,
                         validation_steps=int(2000 / batch_size), callbacks=[checkpoint, lr_scheduler])
 
